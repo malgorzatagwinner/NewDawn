@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QSystemTrayIcon
+from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QSystemTrayIcon, QWidget
 from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
 
@@ -24,7 +24,7 @@ class SignIn(QMainWindow):
         query.first()
         row_count = query.value(0)
         password = query.value(1)
-        if not(row_count):
+        if not(row_count or password):
             print("Incorrect entries!")
         elif(password == self.password.text()):    
             signedin = ConversationWindow()
@@ -92,8 +92,35 @@ class ConversationWindow(QMainWindow):
     def __init__(self):
         super(ConversationWindow, self).__init__()
         loadUi("ConvWindow.ui", self)
+        self.new_doc.clicked.connect(self.new_doc_function)
 
+    def from_popup(self, dprivacy, dtype, dsave):
+        print(dprivacy, dtype, dsave)
 
+    def new_doc_function(self):
+        popup = NewDocPopup(self)
+        popup.exec()        
+
+class NewDocPopup(QDialog):
+    def __init__(self, parent = None):
+        super(NewDocPopup, self).__init__()
+        self.parent = parent
+        loadUi("popup.ui", self)
+        self.buttonBox.accepted.connect(self.okclose)
+        self.buttonBox.rejected.connect(self.reject)
+        
+    def okclose(self):
+        privacy = 0
+        dtype = 0
+        dsave = 0
+        if self.shared_doc.isChecked():
+            privacy = 1
+        if self.type_doc.isChecked():
+            dtype = 1
+        if self.save_to_loc.isChecked():
+            dsave = 1
+        self.parent.from_popup(privacy, dtype, dsave)
+        self.accept()
 
 con = QSqlDatabase.addDatabase("QSQLITE")
 con.setDatabaseName("tabelki.db")
