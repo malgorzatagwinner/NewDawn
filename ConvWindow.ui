@@ -64,7 +64,7 @@ background-color: rgb(9, 26, 48);
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="username">
              <property name="styleSheet">
               <string notr="true">QLabel{
 	color: rgb(255, 255, 255);

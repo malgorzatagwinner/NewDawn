@@ -77,8 +77,24 @@ QPushButton:clicked{
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+	color: rgb(255, 255, 255);
+	background-color: rgb(41, 64, 92);
+}</string>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
-    <widget class="QFrame" name="frame">
+    <widget class="QWidget" name="widget" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
@@ -88,14 +104,81 @@ QPushButton:clicked{
      <property name="styleSheet">
       <string notr="true"/>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="5" column="0">
+       <widget class="QFrame" name="frame">
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="name">
+           <property name="styleSheet">
+            <string notr="true">QLineEdit{
+border: 2px solid rgb(9, 26, 48);
+border-radius: 20px;
+color: #FFF;
+background-color: rgb(11, 38, 71);
+}
+
+QLineEdit:hover{
+border: 2px solid rgb(14, 47, 88);
+background-color: rgb(14, 47, 88);
+}
+
+QLineEdit:focus{
+border: 2px solid rgb(114, 159, 207);
+background-color: rgb(14, 47, 88);
+}</string>
+           </property>
+           <property name="placeholderText">
+            <string> Untitled document</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
       <item row="4" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="styleSheet">
+         <string notr="true">QLabel{
+	font: 12pt &quot;Ubuntu&quot;;
+color: rgb(255, 255, 255);
+}</string>
+        </property>
+        <property name="text">
+         <string>Name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
+        <property name="styleSheet">
+         <string notr="true">QLabel{
+	font: 12pt &quot;Ubuntu&quot;;
+color: rgb(255, 255, 255);
+}</string>
+        </property>
+        <property name="text">
+         <string>Create New Document</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
        <widget class="QLabel" name="label_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -114,65 +197,21 @@ color: rgb(255, 255, 255);
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QFrame" name="frame_3">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="styleSheet">
+         <string notr="true">QLabel{
+	font: 12pt &quot;Ubuntu&quot;;
+color: rgb(255, 255, 255);
+}</string>
         </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
+        <property name="text">
+         <string>Type</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="1">
-          <widget class="QRadioButton" name="type_conv">
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="text">
-            <string>Conversation</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QRadioButton" name="type_doc">
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="text">
-            <string>Document</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
        </widget>
       </item>
-      <item row="5" column="0">
-       <widget class="QFrame" name="frame_4">
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
+      <item row="8" column="0">
+       <widget class="QWidget" name="widget_4" native="true">
         <layout class="QGridLayout" name="gridLayout_5">
          <item row="0" column="0">
           <spacer name="horizontalSpacer_3">
@@ -203,29 +242,62 @@ color: rgb(255, 255, 255);
         </layout>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="styleSheet">
-         <string notr="true">QLabel{
-	font: 12pt &quot;Ubuntu&quot;;
-color: rgb(255, 255, 255);
-}</string>
-        </property>
-        <property name="text">
-         <string>Create New Document</string>
-        </property>
+      <item row="3" column="0">
+       <widget class="QWidget" name="widget_3" native="true">
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="1">
+          <widget class="QRadioButton" name="type_conv">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>Conversation</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="1">
+          <widget class="QRadioButton" name="type_doc">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>Document</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QRadioButton" name="radioButton">
+           <property name="text">
+            <string>Mind Map</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QFrame" name="frame_2">
+       <widget class="QWidget" name="widget_2" native="true">
         <property name="styleSheet">
          <string notr="true"/>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="1">
@@ -270,36 +342,7 @@ color: rgb(255, 255, 255);
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="styleSheet">
-         <string notr="true">QLabel{
-	font: 12pt &quot;Ubuntu&quot;;
-color: rgb(255, 255, 255);
-}</string>
-        </property>
-        <property name="text">
-         <string>Type</string>
-        </property>
-       </widget>
-      </item>
      </layout>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-	color: rgb(255, 255, 255);
-	background-color: rgb(41, 64, 92);
-}</string>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
     </widget>
    </item>
   </layout>
