@@ -15,7 +15,6 @@ class SignIn(QMainWindow):
         self.signup.clicked.connect(self.signup_function)
         self.forgot.clicked.connect(self.forgot_function)
         self.error.setVisible(False)
-    
     def on_resize(self, e):
         size = e.size()
         if (size.width() > size.height()):
@@ -27,14 +26,14 @@ class SignIn(QMainWindow):
             
 
     def signin_function(self):
-        noerror = signin_sql( self.email.text(), self.password.text())
+        noerror, txt = signin_sql( self.email.text(), self.password.text())
         print(noerror)
         if(noerror == True):
             signedin = ConversationWindow()
             self.widget.addWidget(signedin)
             self.widget.setCurrentIndex(self.widget.currentIndex()+1)
         else:
-            self.error.setText(noerror)
+            self.error.setText(txt)
             self.error.setVisible(True)
 
     def signup_function(self):
@@ -53,22 +52,38 @@ class SignUp(QMainWindow):
     def __init__(self):
         super(SignUp, self).__init__()
         loadUi("SignUp.ui", self)
+        self.label.resizeEvent = self.on_resize
         self.signup.clicked.connect(self.signup_function)
         self.forgot.clicked.connect(self.forgot_function)
-
+        self.error.setVisible(False)
+    
+    def on_resize(self, e):
+        size = e.size()
+        if (size.width() > size.height()):
+            m = (size.width() - size.height()) / 2
+            self.label.setContentsMargins(m, 0, m, 0)
+        else:
+            m = (-size.width() + size.height()) / 2
+            self.label.setContentsMargins(0, m, 0, m)
+            
     def setWidget(self, widget):
         self.widget = widget
 
     def signup_function(self):
-        if(signup_sql(self.email.text(), self.username.text(), self.password.text(), self.password_conf.text())):
+        noerror, txt = signup_sql(self.email.text(), self.username.text(), self.password.text(), self.password_conf.text())
+        if noerror:
             signIn = SignIn()
             self.widget.addWidget(signIn)
             self.widget.setCurrentIndex(self.widget.currentIndex()+1)
+        else:
+            self.error.setText(txt)
+            self.error.setVisible(True)
 
     def forgot_function(self):
         signIn = SignIn()
         self.widget.addWidget(signIn)
         self.widget.setCurrentIndex(self.widget.currentIndex()+1)
+        signIn.setWidget(self.widget)
 
 class ConversationWindow(QMainWindow):
     def __init__(self):

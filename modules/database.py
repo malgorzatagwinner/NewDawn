@@ -34,7 +34,7 @@ def signin_sql(email, password):
     if not(row_count or passw):
         return False, "Incorrect entries!"
     elif(passw == password):    
-        return True
+        return True, ""
     else:
         return False, "Incorrect entries!"
     
@@ -48,6 +48,12 @@ def signup_sql(email, username, password, password_conf):
     elif not (email):
         print("Email was not provided!")
         return False, "Email was not provided!"
+    elif not (username):
+        print("Username was not provided!")
+        return False, "Username was not provided!"
+    elif not (password):
+        print("Password was not provided!")
+        return False, "Password was not provided!"
     query.prepare("SELECT COUNT(*) FROM user WHERE email = ?")
     query.addBindValue(email)
     query.exec_()
@@ -71,5 +77,5 @@ def signup_sql(email, username, password, password_conf):
         query.addBindValue(password)
         if not query.exec_():
             print(query.lastError().text())
-    return True
+    return True, ""
 

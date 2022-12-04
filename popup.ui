@@ -285,7 +285,7 @@ color: rgb(255, 255, 255);
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="type_mind">
            <property name="text">
             <string>Mind Map</string>
            </property>
