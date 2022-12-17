@@ -2,6 +2,7 @@ from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QSystemTrayIcon, QWidget
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
+
 from modules.database import signin_sql, signup_sql
 
 class SignIn(QMainWindow):
@@ -80,13 +81,16 @@ class SignUp(QMainWindow):
         signIn.setWidget(self.widget)
 
     def signup_onok(self):
+        print("OK")
         signIn = SignIn(self.networkmanager)
         self.widget.addWidget(signIn)
-        self.widget.setCurrentIndex(self.widget.currentIndex()+1)
+        self.widget.setCurrentIndex(self.widget.currentIndex()-1)
+        signIn.setWidget(self.widget)
         
 
-    def signup_onerror(self):
-        self.error.setText("OK")
+    def signup_onerror(self, body):
+        print("NIE OK")
+        self.error.setText(body.data().decode('utf-8'))
         self.error.setVisible(True)
 
 class ConversationWindow(QMainWindow):

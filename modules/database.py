@@ -1,6 +1,6 @@
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtCore import QByteArray, QUrl
-from PyQt5.QtNetwork import QNetworkRequest
+from PyQt5.QtNetwork import QNetworkRequest, QNetworkReply
 import json
 
 con = QSqlDatabase.addDatabase("QSQLITE")
@@ -21,6 +21,29 @@ for x in f:
             print(sql)
         sql = ""
 f.close()
+slownik = []
+class MySignal:
+    def __init__(self, error_fun, ok_fun, reply):
+        self.error_fun = error_fun
+        self.ok_fun = ok_fun
+        self.reply = reply
+        reply.finished.connect(self.finished)
+        slownik.append(self)
+
+
+    def finished(self):
+        print("finiszed")
+        if self.reply.error() == QNetworkReply.NetworkError.NoError:
+            self.ok_fun()
+            
+        else:
+            body = self.reply.readAll()
+            self.error_fun(body)
+        try:
+            slownik.remove(self)
+        except:
+            pass
+
 
 def signin_sql(email, password):
     if not (email):
@@ -89,6 +112,4 @@ def signup_sql(email, username, password, password_conf, networkmanager, signup_
     request = QNetworkRequest(QUrl("http://127.0.0.1:8000/app/signup/"))
     request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
     reply = networkmanager.post(request, QByteArray(data.encode()))
-    reply.finished.connect(signup_onok)
-    reply.errorOccurred.connect(signup_onerror)
-
+    mySignal = MySignal(signup_onerror, signup_onok, reply)
