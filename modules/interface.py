@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from modules.database import signin_sql, signup_sql
 
 class SignIn(QMainWindow):
-    def __init__(self):
+    def __init__(self, NetworkAccessManager):
         super(SignIn, self).__init__()
         loadUi("SignIn.ui", self)
         #pix = QPixmap("newdawn.png", )
@@ -15,6 +15,7 @@ class SignIn(QMainWindow):
         self.signup.clicked.connect(self.signup_function)
         self.forgot.clicked.connect(self.forgot_function)
         self.error.setVisible(False)
+        self.networkmanager = NetworkAccessManager
     def on_resize(self, e):
         size = e.size()
         if (size.width() > size.height()):
@@ -37,7 +38,7 @@ class SignIn(QMainWindow):
             self.error.setVisible(True)
 
     def signup_function(self):
-        signUp = SignUp()
+        signUp = SignUp(self.networkmanager)
         self.widget.addWidget(signUp)
         self.widget.setCurrentIndex(self.widget.currentIndex()+1)
         signUp.setWidget(self.widget)
@@ -49,14 +50,14 @@ class SignIn(QMainWindow):
         pass
 
 class SignUp(QMainWindow):
-    def __init__(self):
+    def __init__(self, NetworkAccessManager):
         super(SignUp, self).__init__()
         loadUi("SignUp.ui", self)
         self.label.resizeEvent = self.on_resize
         self.signup.clicked.connect(self.signup_function)
         self.forgot.clicked.connect(self.forgot_function)
         self.error.setVisible(False)
-    
+        self.networkmanager = NetworkAccessManager 
     def on_resize(self, e):
         size = e.size()
         if (size.width() > size.height()):
@@ -70,20 +71,23 @@ class SignUp(QMainWindow):
         self.widget = widget
 
     def signup_function(self):
-        noerror, txt = signup_sql(self.email.text(), self.username.text(), self.password.text(), self.password_conf.text())
-        if noerror:
-            signIn = SignIn()
-            self.widget.addWidget(signIn)
-            self.widget.setCurrentIndex(self.widget.currentIndex()+1)
-        else:
-            self.error.setText(txt)
-            self.error.setVisible(True)
+        signup_sql(self.email.text(), self.username.text(), self.password.text(), self.password_conf.text(), self.networkmanager, self.signup_onerror, self.signup_onok)
 
     def forgot_function(self):
         signIn = SignIn()
         self.widget.addWidget(signIn)
         self.widget.setCurrentIndex(self.widget.currentIndex()+1)
         signIn.setWidget(self.widget)
+
+    def signup_onok(self):
+        signIn = SignIn(self.networkmanager)
+        self.widget.addWidget(signIn)
+        self.widget.setCurrentIndex(self.widget.currentIndex()+1)
+        
+
+    def signup_onerror(self):
+        self.error.setText("OK")
+        self.error.setVisible(True)
 
 class ConversationWindow(QMainWindow):
     def __init__(self):

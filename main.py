@@ -5,12 +5,14 @@ from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QSystemTrayIcon,
 from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
 from modules.interface import SignIn
-
+from PyQt5.QtNetwork import QNetworkAccessManager
 
 app = QApplication(sys.argv)
 trayIcon = QSystemTrayIcon(QIcon('newdawn.png'), parent=app)
 trayIcon.show()
-mainwindow = SignIn()
+
+NetworkAccessManager = QNetworkAccessManager()
+mainwindow = SignIn(NetworkAccessManager)
 app.setWindowIcon(QIcon('newdawn.png'))
 widget = QtWidgets.QStackedWidget()
 widget.addWidget(mainwindow)

@@ -2,6 +2,10 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from .models import Document, Contact, User, Message
 from django.views.decorators.csrf import csrf_exempt
 import json
+import re
+#from django.core import serializers
+#from .serializer import SignUpReq
+
 
 def index(request):
     return JsonResponse({'text':"Siemkaaa"})
@@ -36,13 +40,24 @@ def messages(request):
 def signup(request):
     req = dict()
     if request.method != 'POST':
-        return HttpResponseBadRequest()
+        return HttpResponsebadRequest()
     try:
+#        req = serializers.deserialize("json", request.body)
         req = json.loads(request.body)
+
     except json.JSONDecodeError:
-        print(req)
-        
-    if len(req) != 4:
-        return HttpResponseBadRequest()
-    return HttpResponse()
+        return HttpResponseBadRequest("Invalid JSON")
+    
+    if len(req) !=4 or set(req.keys()) != set(["email", "username", "password", "password_conf"]):
+        return HttpResponseBadRequest("Wrong request")
+
+    regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    if not re.fullmatch(regex, req["email"]):
+        return HttpResponseBadRequest("Invalid email")
+    
+    if req["password"] != req["password_conf"]:
+        print(req["password_conf"])
+        return HttpResponseBadRequest("Passwords did not match")
+
+    return HttpResponse("OK")
 

@@ -1,4 +1,7 @@
 from PyQt5.QtSql import QSqlDatabase, QSqlQuery
+from PyQt5.QtCore import QByteArray, QUrl
+from PyQt5.QtNetwork import QNetworkRequest
+import json
 
 con = QSqlDatabase.addDatabase("QSQLITE")
 con.setDatabaseName("tabelki.db")
@@ -38,7 +41,7 @@ def signin_sql(email, password):
     else:
         return False, "Incorrect entries!"
     
-def signup_sql(email, username, password, password_conf):
+def signup_sql(email, username, password, password_conf, networkmanager, signup_onerror, signup_onok):
     if not (password == password_conf):
         print("Passwords are not the same!")
         print(password)
@@ -54,7 +57,7 @@ def signup_sql(email, username, password, password_conf):
     elif not (password):
         print("Password was not provided!")
         return False, "Password was not provided!"
-    query.prepare("SELECT COUNT(*) FROM user WHERE email = ?")
+    """ query.prepare("SELECT COUNT(*) FROM user WHERE email = ?")
     query.addBindValue(email)
     query.exec_()
     query.first()
@@ -77,5 +80,15 @@ def signup_sql(email, username, password, password_conf):
         query.addBindValue(password)
         if not query.exec_():
             print(query.lastError().text())
-    return True, ""
+"""
+    data = {}
+    for info in ["email", "username", "password", "password_conf"]:
+        data[info] = eval(info)
+    data = json.dumps(data)
+    print(data)
+    request = QNetworkRequest(QUrl("http://127.0.0.1:8000/app/signup/"))
+    request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
+    reply = networkmanager.post(request, QByteArray(data.encode()))
+    reply.finished.connect(signup_onok)
+    reply.errorOccurred.connect(signup_onerror)
 
