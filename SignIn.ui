@@ -1,54 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>New_Dawn</class>
- <widget class="QMainWindow" name="New_Dawn">
+ <widget class="QWidget" name="New_Dawn">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1136</width>
+    <width>1500</width>
     <height>912</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>301</width>
-    <height>300</height>
-   </size>
-  </property>
-  <property name="font">
-   <font>
-    <pointsize>12</pointsize>
-   </font>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>New_Dawn</string>
   </property>
-  <property name="layoutDirection">
-   <enum>Qt::LeftToRight</enum>
-  </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow{
+   <string notr="true">QWidget{
 	background-color: rgb(8, 29, 55);
-}</string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <property name="sizePolicy">
-    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="layoutDirection">
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QWidget{
+}
+QWidget{
 	background-color: rgb(8, 29, 55);
 
 }
@@ -78,7 +53,7 @@ background-color: rgb(14, 47, 88);
 QPushButton{
 min-height: 40px;
 border-radius: 20px ;
-background-color: rgb(78, 154, 6); 
+background-color:  rgb(0, 93, 8);
 color: #fff;
 }
 
@@ -87,6 +62,19 @@ background-color: rgb(102, 189, 21);
 }</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
     <item row="1" column="1">
      <widget class="QFrame" name="frame">
       <property name="sizePolicy">
@@ -425,19 +413,6 @@ text-decoration: underline;
       </property>
      </spacer>
     </item>
-    <item row="2" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>40</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="1" column="2">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
@@ -466,8 +441,16 @@ text-decoration: underline;
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
- </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>3</width>
+     <height>24</height>
+    </rect>
+   </property>
+  </widget>
  <resources>
   <include location="logo.qrc"/>
  </resources>

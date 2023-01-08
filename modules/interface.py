@@ -1,22 +1,25 @@
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QSystemTrayIcon, QWidget
+from PyQt5.QtWidgets import QDialog, QApplication, QSystemTrayIcon, QWidget, QMainWindow
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import Qt
 
 from modules.database import signin_sql, signup_sql
 
-class SignIn(QMainWindow):
-    def __init__(self, NetworkAccessManager):
+class SignIn(QWidget):
+    def __init__(self, mainWindow):
         super(SignIn, self).__init__()
         loadUi("SignIn.ui", self)
-        #pix = QPixmap("newdawn.png", )
         #self.label.setPixmap(pix.scaled(1181, 1181,Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation))
         self.label.resizeEvent = self.on_resize
         self.signin.clicked.connect(self.signin_function)
         self.signup.clicked.connect(self.signup_function)
         self.forgot.clicked.connect(self.forgot_function)
         self.error.setVisible(False)
-        self.networkmanager = NetworkAccessManager
+        self.networkmanager = mainWindow.networkmanager
+        self.mainWindow = mainWindow
+        self.showMaximized()
+        #self.show()
+
     def on_resize(self, e):
         size = e.size()
         if (size.width() > size.height()):
@@ -32,17 +35,17 @@ class SignIn(QMainWindow):
         print(noerror)
         if(noerror == True):
             signedin = ConversationWindow()
-            self.widget.addWidget(signedin)
-            self.widget.setCurrentIndex(self.widget.currentIndex()+1)
+            mainWindow.setCentralWidget(signedin)
+            #self.widget.setCurrentIndex(self.widget.currentIndex()+1)
         else:
             self.error.setText(txt)
             self.error.setVisible(True)
 
     def signup_function(self):
-        signUp = SignUp(self.networkmanager)
-        self.widget.addWidget(signUp)
-        self.widget.setCurrentIndex(self.widget.currentIndex()+1)
-        signUp.setWidget(self.widget)
+        signUp = self.mainWindow.goSignUp()
+        #self.widget.addWidget(signUp)
+        #self.widget.setCurrentIndex(self.widget.currentIndex()+1)
+        #signUp.setWidget(self.widget)
 
     def setWidget(self, widget):
         self.widget = widget
@@ -50,15 +53,16 @@ class SignIn(QMainWindow):
     def forgot_function(self):
         pass
 
-class SignUp(QMainWindow):
-    def __init__(self, NetworkAccessManager):
+class SignUp(QWidget):
+    def __init__(self, mainWindow):
         super(SignUp, self).__init__()
         loadUi("SignUp.ui", self)
         self.label.resizeEvent = self.on_resize
         self.signup.clicked.connect(self.signup_function)
         self.forgot.clicked.connect(self.forgot_function)
         self.error.setVisible(False)
-        self.networkmanager = NetworkAccessManager 
+        self.mainWindow = mainWindow
+        self.networkmanager = mainWindow.networkmanager 
     def on_resize(self, e):
         size = e.size()
         if (size.width() > size.height()):
@@ -75,25 +79,18 @@ class SignUp(QMainWindow):
         signup_sql(self.email.text(), self.username.text(), self.password.text(), self.password_conf.text(), self.networkmanager, self.signup_onerror, self.signup_onok)
 
     def forgot_function(self):
-        signIn = SignIn()
-        self.widget.addWidget(signIn)
-        self.widget.setCurrentIndex(self.widget.currentIndex()+1)
-        signIn.setWidget(self.widget)
+        self.mainWindow.goSignIn()
 
     def signup_onok(self):
         print("OK")
-        signIn = SignIn(self.networkmanager)
-        self.widget.addWidget(signIn)
-        self.widget.setCurrentIndex(self.widget.currentIndex()-1)
-        signIn.setWidget(self.widget)
-        
+        self.mainWindow.goSignIn()
 
     def signup_onerror(self, body):
         print("NIE OK")
         self.error.setText(body.data().decode('utf-8'))
         self.error.setVisible(True)
 
-class ConversationWindow(QMainWindow):
+class ConversationWindow(QWidget):
     def __init__(self):
         super(ConversationWindow, self).__init__()
         loadUi("ConvWindow.ui", self)
