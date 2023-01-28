@@ -2,7 +2,9 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from .models import Document, Contact, User, Message
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Q
 import re
+from django.core.exceptions import ObjectDoesNotExist
 #from django.core import serializers
 #from .serializer import SignUpReq
 
@@ -27,6 +29,7 @@ def contacts(request):
     return JsonResponse(contacts, safe=False)
 
 def user(request):
+    user_ = 
     user = User.objects.filter(user_id='1').values('username', 'photo') #user_id będzie z autentykacji
     user = list(user)
     return JsonResponse(user, safe=False)
@@ -58,6 +61,34 @@ def signup(request):
     if req["password"] != req["password_conf"]:
         print(req["password_conf"])
         return HttpResponseBadRequest("Passwords did not match")
+    try:
+        u1 = User.objects.get(Q(email=req["email"]) | Q(username = req["username"]))
 
-    return HttpResponse("OK")
+    except ObjectDoesNotExist:
+        user = User.objects.create(email=req["email"], username = req["username"], password = req["password"])
+        user.save()
+        return HttpResponse("OK")
+    print("user istnieje")
+    return HttpResponseBadRequest("lol")
+
+
+@csrf_exempt 
+def signin(request):
+    req = dict()
+    if request.method != 'POST':
+        return HttpResponsebadRequest()
+    try:
+#        req = serializers.deserialize("json", request.body)
+        req = json.loads(request.body)
+
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest("Invalid JSON")
+    
+    if len(req) !=2 or set(req.keys()) != set(["email", "password"]):
+        return HttpResponseBadRequest("Wrong request")
+    
+    u = User.objects.get(Q(email=req["email"]) | Q(username = req["email"]))
+    if u.password == req["password"]:
+        return HttpResponse("OK")
+
 

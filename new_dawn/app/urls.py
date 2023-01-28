@@ -9,4 +9,5 @@ urlpatterns = [
     path('documents/<int:documents_id>/', views.messages, name='doc_messages'),
     path('me/', views.user, name='user'),
     path('signup/', views.signup, name='signup'),
+    path('signin/', views.signin, name='signin'),
 ]

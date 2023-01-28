@@ -1,7 +1,9 @@
 # Create your models here.
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-class User(models.Model):
+class User(AbstractUser):
+    user = models.OneToOneField(User, on_delete = modelts.CASCADE)
     user_id = models.AutoField(primary_key=True)
     email = models.CharField(max_length=45)
     username = models.CharField(max_length=45)
@@ -10,7 +12,6 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     class Meta:
-        managed = False
         db_table = 'user'
 
 
@@ -19,7 +20,6 @@ class DocumentType(models.Model):
     document_type_name = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
         db_table = 'document_type'
 
 
@@ -30,7 +30,6 @@ class Contact(models.Model):
     contact_user_name = models.CharField(max_length=45)
 
     class Meta:
-        managed = False
         db_table = 'contact'
 
 
@@ -43,7 +42,6 @@ class Document(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        managed = False
         db_table = 'document'
 
 
@@ -55,6 +53,5 @@ class Message(models.Model):
     viewed = models.DateTimeField(auto_now_add=True)
     document_document = models.ForeignKey(Document, on_delete=models.CASCADE)
     class Meta:
-        managed = False
         db_table = 'message'
 

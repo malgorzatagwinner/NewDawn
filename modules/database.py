@@ -2,7 +2,7 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtCore import QByteArray, QUrl
 from PyQt5.QtNetwork import QNetworkRequest, QNetworkReply
 import json
-
+"""
 con = QSqlDatabase.addDatabase("QSQLITE")
 con.setDatabaseName("tabelki.db")
 if not con.open():
@@ -21,6 +21,8 @@ for x in f:
             print(sql)
         sql = ""
 f.close()
+"""
+
 slownik = []
 class MySignal:
     def __init__(self, error_fun, ok_fun, reply):
@@ -45,11 +47,13 @@ class MySignal:
             pass
 
 
-def signin_sql(email, password):
+def signin_sql(email, password, networkmanager, signup_onerror, signup_onok):
     if not (email):
         return False, "Email or username was not provided!"
+    elif not (password):
+        print("Password was not provided!")
         
-    query.prepare("SELECT COUNT(*), password FROM user WHERE email = ? OR username = ?")
+    """query.prepare("SELECT COUNT(*), password FROM user WHERE email = ? OR username = ?")
     query.addBindValue(email)
     query.addBindValue(email)
     if not query.exec_():
@@ -63,7 +67,18 @@ def signin_sql(email, password):
         return True, ""
     else:
         return False, "Incorrect entries!"
-    
+    """
+    data = {}
+    for info in ["email", "password"]:
+        data[info] = eval(info)
+    data = json.dumps(data)
+    print(data)
+    request = QNetworkRequest(QUrl("http://127.0.0.1:8000/app/signin/"))
+    request.setHeader(QNetworkRequest.ContentTypeHeader, "application/json")
+    reply = networkmanager.post(request, QByteArray(data.encode()))
+    mySignal = MySignal(signup_onerror, signup_onok, reply)
+
+
 def signup_sql(email, username, password, password_conf, networkmanager, signup_onerror, signup_onok):
     if not (password == password_conf):
         print("Passwords are not the same!")

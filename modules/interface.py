@@ -29,29 +29,32 @@ class SignIn(QWidget):
             m = (-size.width() + size.height()) / 2
             self.label.setContentsMargins(0, m, 0, m)
             
-
-    def signin_function(self):
-        noerror, txt = signin_sql( self.email.text(), self.password.text())
-        print(noerror)
-        if(noerror == True):
-            signedin = ConversationWindow()
-            mainWindow.setCentralWidget(signedin)
-            #self.widget.setCurrentIndex(self.widget.currentIndex()+1)
-        else:
-            self.error.setText(txt)
-            self.error.setVisible(True)
+    def ifsignedup(self, message, iserror):
+        self.error.setText(message)
+        if not iserror:
+            self.error.setStyleSheet("color:rgb(255,255,255)")
+        self.error.setVisible(True)
 
     def signup_function(self):
-        signUp = self.mainWindow.goSignUp()
-        #self.widget.addWidget(signUp)
-        #self.widget.setCurrentIndex(self.widget.currentIndex()+1)
-        #signUp.setWidget(self.widget)
-
+        self.mainWindow.goSignUp()
+    
     def setWidget(self, widget):
         self.widget = widget
-
+    
     def forgot_function(self):
         pass
+
+    def signin_function(self):
+        signin_sql(self.email.text(), self.password.text(), self.networkmanager, self.signin_onerror, self.signin_onok)
+
+    def signin_onok(self):
+        print("OK")
+        self.mainWindow.goConversation()
+
+    def signin_onerror(self, body):
+        print("NIE OK")
+        self.error.setText(body.data().decode('utf-8'))
+        self.error.setVisible(True)
 
 class SignUp(QWidget):
     def __init__(self, mainWindow):
@@ -83,7 +86,7 @@ class SignUp(QWidget):
 
     def signup_onok(self):
         print("OK")
-        self.mainWindow.goSignIn()
+        self.mainWindow.goSignIn("Thank you for registering. You can now sign in", False)
 
     def signup_onerror(self, body):
         print("NIE OK")
@@ -91,7 +94,7 @@ class SignUp(QWidget):
         self.error.setVisible(True)
 
 class ConversationWindow(QWidget):
-    def __init__(self):
+    def __init__(self, mainWindow):
         super(ConversationWindow, self).__init__()
         loadUi("ConvWindow.ui", self)
         self.new_doc.clicked.connect(self.new_doc_function)

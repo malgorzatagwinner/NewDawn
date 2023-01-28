@@ -4,13 +4,15 @@ from PyQt5.QtSql import QSqlDatabase, QSqlQuery
 from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QSystemTrayIcon, QWidget
 from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
-from modules.interface import SignIn, SignUp
+from modules.interface import SignIn, SignUp, ConversationWindow
 from PyQt5.QtNetwork import QNetworkAccessManager
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 
 app = QApplication(sys.argv)
 trayIcon = QSystemTrayIcon(QIcon('newdawn.png'), parent=app)
 trayIcon.show()
+global signedup
+signedup = False
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -24,9 +26,12 @@ class MainWindow(QMainWindow):
         self.show()
 
     @pyqtSlot()
-    def goSignIn(self):
+    def goSignIn(self, message=None, iserror=False):
         widget = SignIn(self)
+        if message is not None:
+            widget.ifsignedup(message, iserror)
         self.setCentralWidget(widget)
+    
 
     @pyqtSlot()
     def goSignUp(self):
