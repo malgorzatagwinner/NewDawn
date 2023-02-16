@@ -1,3 +1,4 @@
 *.swp
 tabelki.db
 /env/
+__pycache__
