@@ -1,10 +1,12 @@
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
-from .models import Document, Contact, User, Message
+from .models import Document, Contact, Message
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db.models import Q
+from django.contrib.auth.models import User
 import re
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate
 #from django.core import serializers
 #from .serializer import SignUpReq
 
@@ -29,9 +31,9 @@ def contacts(request):
     return JsonResponse(contacts, safe=False)
 
 def user(request):
-    user_ = 
-    user = User.objects.filter(user_id='1').values('username', 'photo') #user_id będzie z autentykacji
-    user = list(user)
+    user_ = User.objects.get(username)
+    #user = User.objects.filter(user_id='1').values('username', 'photo') #user_id będzie z autentykacji
+    user = list(user_)
     return JsonResponse(user, safe=False)
 
 def messages(request):
@@ -61,11 +63,11 @@ def signup(request):
     if req["password"] != req["password_conf"]:
         print(req["password_conf"])
         return HttpResponseBadRequest("Passwords did not match")
+    #u1 = User.objects.get(Q(email=req["email"]) | Q(username = req["username"]))
     try:
-        u1 = User.objects.get(Q(email=req["email"]) | Q(username = req["username"]))
-
-    except ObjectDoesNotExist:
-        user = User.objects.create(email=req["email"], username = req["username"], password = req["password"])
+        u1 = User.objects.get(email=req["email"]) or User.objects.get(username=req["username"])
+    except User.DoesNotExist:
+        user = User.objects.create_user(email=req["email"], username = req["username"], password = req["password"])
         user.save()
         return HttpResponse("OK")
     print("user istnieje")
@@ -87,8 +89,8 @@ def signin(request):
     if len(req) !=2 or set(req.keys()) != set(["email", "password"]):
         return HttpResponseBadRequest("Wrong request")
     
-    u = User.objects.get(Q(email=req["email"]) | Q(username = req["email"]))
-    if u.password == req["password"]:
+    u = authenticate(email=req["email"], password=req["password"]) or authenticate(username=req["email"], password=req["password"])
+    if u is not None:
         return HttpResponse("OK")
-
+    return HttpResponseBadRequest("lol")
 

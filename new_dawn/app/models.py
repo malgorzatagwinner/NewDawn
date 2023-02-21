@@ -1,19 +1,7 @@
 # Create your models here.
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-
-class User(AbstractUser):
-    user = models.OneToOneField(User, on_delete = modelts.CASCADE)
-    user_id = models.AutoField(primary_key=True)
-    email = models.CharField(max_length=45)
-    username = models.CharField(max_length=45)
-    password = models.CharField(max_length=45)
-    photo = models.CharField(max_length=45)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    class Meta:
-        db_table = 'user'
-
+#from django.contrib.auth.models import User, AbstractUser
+from django.conf import settings
 
 class DocumentType(models.Model):
     document_type_id = models.AutoField(primary_key=True)
@@ -26,7 +14,7 @@ class DocumentType(models.Model):
 class Contact(models.Model):
     contact_id = models.AutoField(primary_key=True)
     contact_user_id = models.IntegerField()
-    user_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     contact_user_name = models.CharField(max_length=45)
 
     class Meta:
@@ -47,7 +35,7 @@ class Document(models.Model):
 
 class Message(models.Model):
     message_id = models.AutoField(primary_key=True)
-    user_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.CharField(max_length=45)
     created_at = models.DateTimeField(auto_now_add=True)
     viewed = models.DateTimeField(auto_now_add=True)
